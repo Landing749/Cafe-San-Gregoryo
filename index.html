@@ -243,12 +243,12 @@
 
   function renderCart(){
     const el = document.getElementById('cartItems'); 
-    el.innerHTML='';
+    el.innerHTML = '';
     let total = 0;
     cart.forEach((it, idx) => {
       total += it.price * it.qty;
       const node = document.createElement('div'); 
-      node.className='cart-item';
+      node.className = 'cart-item';
       node.innerHTML = `
         <div style="flex:1">
           <div style="font-weight:700">${it.name}</div>
@@ -275,13 +275,13 @@
 
   window.changeQty = function(i, delta){
     cart[i].qty += delta; 
-    if(cart[i].qty <= 0) cart.splice(i,1);
+    if(cart[i].qty <= 0) cart.splice(i, 1);
     renderCart();
   }
 
   window.clearCart = function(){ 
     if(confirm('Clear cart?')){
-      cart=[]; 
+      cart = []; 
       renderCart();
     }
   }
@@ -303,7 +303,7 @@
     const ordersRef = ref(db, 'orders');
     const newOrderRef = push(ordersRef);
     set(newOrderRef, {
-      customer: name,
+      customer: name,             // ✅ Ensures the admin panel gets the customer's name
       note: note,
       items: cart,
       total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
