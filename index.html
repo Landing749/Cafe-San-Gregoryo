@@ -217,59 +217,109 @@
     <div style="opacity:0.8">Made with local love ❤️</div>
   </footer>
 
-  <script>
-    // Simple client-side mock ordering system
-    const CART_KEY = 'cafe_sg_cart_v1';
-    let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-    function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); renderCart(); }
-    function addToCart(name,price){
-      const found = cart.find(i=>i.name===name);
-      if(found) found.qty++;
-      else cart.push({name,price,qty:1});
-      saveCart();
-      alert(name + ' added to your cart.');
-    }
-    function renderCart(){
-      const el = document.getElementById('cartItems'); el.innerHTML='';
-      let total=0;
-      cart.forEach((it,idx)=>{
-        total += it.price * it.qty;
-        const node = document.createElement('div'); node.className='cart-item';
-        node.innerHTML = `
-          <div style="flex:1">
-            <div style="font-weight:700">${it.name}</div>
-            <div class="small">₱${it.price} × ${it.qty}</div>
-          </div>
-          <div class="qty">
-            <button onclick="changeQty(${idx}, -1)">-</button>
-            <div style="min-width:20px;text-align:center">${it.qty}</div>
-            <button onclick="changeQty(${idx}, 1)">+</button>
-          </div>
-        `;
-        el.appendChild(node);
-      });
-      document.getElementById('cartTotal').innerText = total;
-    }
-    function changeQty(i, delta){
-      cart[i].qty += delta; if(cart[i].qty<=0) cart.splice(i,1); saveCart();
-    }
-    function clearCart(){ if(confirm('Clear cart?')){ cart=[]; saveCart(); }}
-    function toggleCart(){ const d = document.getElementById('cartDrawer'); d.classList.toggle('open'); d.setAttribute('aria-hidden', d.classList.contains('open')? 'false':'true'); renderCart(); }
-    function checkout(){
-      if(cart.length===0){ alert('Cart is empty'); return; }
-      const total = cart.reduce((s,i)=>s + i.price*i.qty,0);
-      // Mock checkout: collect name and note
-      const name = prompt('Enter your name for mock order');
-      if(!name) return; const note = prompt('Any note for the order? (optional)')||'';
-      // Save mock order to localStorage (simulated)
-      const orders = JSON.parse(localStorage.getItem('cafe_sg_orders')||'[]');
-      orders.push({id:Date.now(),name,items:cart,total,note});
-      localStorage.setItem('cafe_sg_orders', JSON.stringify(orders));
-      alert('Mock order placed! (saved locally)\nTotal: ₱' + total);
-      cart = []; saveCart(); toggleCart();
-    }
-    // initial
+ <script type="module">
+  // Firebase imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7QVhaR95hO_dUYcP7dJ__2DW0blpMKFI",
+    authDomain: "la-mesa-cafe-system.firebaseapp.com",
+    databaseURL: "https://la-mesa-cafe-system-default-rtdb.firebaseio.com",
+    projectId: "la-mesa-cafe-system",
+    storageBucket: "la-mesa-cafe-system.appspot.com",
+    messagingSenderId: "234244615396",
+    appId: "1:234244615396:web:87725489a3f70fbbabd0f1",
+    measurementId: "G-9CL7KJTYVB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Cart logic
+  let cart = [];
+
+  function renderCart(){
+    const el = document.getElementById('cartItems'); 
+    el.innerHTML='';
+    let total = 0;
+    cart.forEach((it, idx) => {
+      total += it.price * it.qty;
+      const node = document.createElement('div'); 
+      node.className='cart-item';
+      node.innerHTML = `
+        <div style="flex:1">
+          <div style="font-weight:700">${it.name}</div>
+          <div class="small">₱${it.price} × ${it.qty}</div>
+        </div>
+        <div class="qty">
+          <button onclick="changeQty(${idx}, -1)">-</button>
+          <div style="min-width:20px;text-align:center">${it.qty}</div>
+          <button onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+      `;
+      el.appendChild(node);
+    });
+    document.getElementById('cartTotal').innerText = total;
+  }
+
+  window.addToCart = function(name, price){
+    const found = cart.find(i => i.name === name);
+    if(found) found.qty++;
+    else cart.push({name, price, qty:1});
     renderCart();
-  </script>
+    alert(`${name} added to your cart.`);
+  }
+
+  window.changeQty = function(i, delta){
+    cart[i].qty += delta; 
+    if(cart[i].qty <= 0) cart.splice(i,1);
+    renderCart();
+  }
+
+  window.clearCart = function(){ 
+    if(confirm('Clear cart?')){
+      cart=[]; 
+      renderCart();
+    }
+  }
+
+  window.toggleCart = function(){ 
+    const d = document.getElementById('cartDrawer'); 
+    d.classList.toggle('open'); 
+    d.setAttribute('aria-hidden', d.classList.contains('open') ? 'false':'true'); 
+    renderCart(); 
+  }
+
+  window.checkout = function(){
+    if(cart.length === 0){ alert('Cart is empty'); return; }
+    const name = prompt('Enter your name for order');
+    if(!name) return; 
+    const note = prompt('Any note for the order? (optional)') || '';
+
+    // Push order to Firebase Realtime Database
+    const ordersRef = ref(db, 'orders');
+    const newOrderRef = push(ordersRef);
+    set(newOrderRef, {
+      customer: name,
+      note: note,
+      items: cart,
+      total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
+      timestamp: Date.now()
+    }).then(() => {
+      alert(`Order placed online! Total: ₱${cart.reduce((sum, i) => sum + i.price * i.qty, 0)}`);
+      cart = []; 
+      renderCart();
+      toggleCart();
+    }).catch(err => {
+      alert('Error placing order: ' + err);
+    });
+  }
+
+  // Initial render
+  renderCart();
+ </script>
 </body>
 </html>
