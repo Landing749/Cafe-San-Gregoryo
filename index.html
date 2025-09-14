@@ -208,7 +208,10 @@
     <div id="cartItems"></div>
     <div class="checkout">
       <div style="font-weight:800">Total: ₱<span id="cartTotal">0</span></div>
-      <button class="btn" onclick="checkout()">Checkout</button>
+      <div style="display:flex;gap:6px">
+        <button class="btn" onclick="checkout()">Checkout</button>
+        <button class="btn secondary" onclick="downloadReceipt()">Receipt PDF</button>
+      </div>
     </div>
   </div>
 
@@ -217,12 +220,15 @@
     <div style="opacity:0.8">Made with local love ❤️</div>
   </footer>
 
- <script type="module">
+  <!-- jsPDF and QR code libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script type="module">
   // Firebase imports
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
   import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyC7QVhaR95hO_dUYcP7dJ__2DW0blpMKFI",
     authDomain: "la-mesa-cafe-system.firebaseapp.com",
@@ -234,11 +240,9 @@
     measurementId: "G-9CL7KJTYVB"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Cart logic
   let cart = [];
 
   function renderCart(){
@@ -299,11 +303,11 @@
     if(!name) return; 
     const note = prompt('Any note for the order? (optional)') || '';
 
-    // Push order to Firebase Realtime Database
     const ordersRef = ref(db, 'orders');
     const newOrderRef = push(ordersRef);
+    const orderId = newOrderRef.key; // unique id
     set(newOrderRef, {
-      customer: name,             // ✅ Ensures the admin panel gets the customer's name
+      customer: name,
       note: note,
       items: cart,
       total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
@@ -318,8 +322,26 @@
     });
   }
 
-  // Initial render
+  // Receipt PDF generation
+  window.downloadReceipt = function(){
+    if(cart.length === 0){ alert('Cart is empty'); return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const date = new Date().toLocaleString();
+
+    doc.setFontSize(16); doc.text("La Mesa Café", 105, 15, {align:'center'});
+    doc.setFontSize(10); doc.text(`Order Date: ${date}`, 105, 22, {align:'center'});
+    let y = 35;
+    cart.forEach(item=>{
+      doc.text(`${item.qty} × ${item.name}`, 14, y);
+      doc.text(`₱${item.price*item.qty}`, 160, y, {align:'right'});
+      y += 8;
+    });
+    doc.setFontSize(12); doc.text(`Total: ₱${cart.reduce((sum,i)=>sum+i.price*i.qty,0)}`, 105, y+8, {align:'center'});
+    doc.save('receipt.pdf');
+  }
+
   renderCart();
- </script>
+  </script>
 </body>
 </html>
