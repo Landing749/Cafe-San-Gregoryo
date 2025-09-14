@@ -51,7 +51,88 @@
     .qty button{padding:6px 8px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);background:#fff}
     .checkout{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 
-    /* responsive */
+    /* coffee animation */
+    #coffeeAnimation {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      display: none;
+    }
+    .cup {
+      width: 80px;
+      height: 100px;
+      background: #fff;
+      border-radius: 0 0 20px 20px;
+      position: relative;
+      border: 3px solid #7b3f00;
+      animation: spinCup 1s linear infinite;
+    }
+    @keyframes spinCup {
+      from { transform: rotate(0deg);}
+      to { transform: rotate(360deg);}
+    }
+    .coffee {
+      width: 70px;
+      height: 40px;
+      background: #6b3f00;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .swirl {
+      width: 120%;
+      height: 120%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #fff 15%, transparent 16%);
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      animation: swirl 1.5s linear infinite;
+    }
+    @keyframes swirl {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    .latte-leaf {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: radial-gradient(ellipse at center, #fff 40%, transparent 60%);
+      border-radius: 50%;
+      animation: leafAppear 1s ease forwards 0.5s;
+    }
+    @keyframes leafAppear {
+      from { transform: translateX(-50%) scale(0);}
+      to { transform: translateX(-50%) scale(1);}
+    }
+    .steam {
+      position: absolute;
+      width: 6px;
+      height: 20px;
+      background: rgba(255,255,255,0.8);
+      top: -20px;
+      left: 50%;
+      border-radius: 50%;
+      animation: steamRise 1.5s ease-in-out infinite;
+      transform: translateX(-50%) scaleY(0.5);
+      opacity: 0;
+    }
+    .steam1 { animation-delay: 0s; left: 45%; }
+    .steam2 { animation-delay: 0.3s; left: 50%; }
+    .steam3 { animation-delay: 0.6s; left: 55%; }
+
+    @keyframes steamRise {
+      0% { transform: translateX(-50%) translateY(0) scaleY(0.5); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(-50%) translateY(-40px) scaleY(1); opacity: 0; }
+    }
+
     @media (max-width:900px){.hero{grid-template-columns:1fr;padding:32px 5%}.brand h1{font-size:18px}}
   </style>
 </head>
@@ -76,117 +157,21 @@
     <div class="intro">
       <div class="eyebrow">Kape at Kuwento</div>
       <h2>Sa tabi ng San Gregoryo — lasa at alaala</h2>
-      <p class="lead">Tara — magpahinga sa aming tahimik na kanto. Pinagsama namin ang mga sining ng lokal na paninigang at kape — inihahain sa simpleng paraan pero puno ng puso. Perfect para sa umaga, hapon, at mga sambuhay na alaala.</p>
+      <p class="lead">Tara — magpahinga sa aming tahimik na kanto...</p>
       <div class="cta">
         <button class="btn" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">Mag-order</button>
         <button class="btn secondary" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Tungkol sa Amin</button>
       </div>
     </div>
-
-    <aside class="card special-box">
-      <strong>Mga Tampok</strong>
-      <div class="special-item">
-        <div class="thumb">☕</div>
-        <div>
-          <div style="font-weight:800">Kapeng San Gregoryo</div>
-          <div class="small">Blend ng lokal na kape at espreso</div>
-          <div class="price">₱120</div>
-        </div>
-      </div>
-      <div class="special-item">
-        <div class="thumb">🥐</div>
-        <div>
-          <div style="font-weight:800">Ensaymada ala Casa</div>
-          <div class="small">Malambot, may keso at asukal</div>
-          <div class="price">₱80</div>
-        </div>
-      </div>
-      <div class="special-item">
-        <div class="thumb">🍲</div>
-        <div>
-          <div style="font-weight:800">Adobong Gata</div>
-          <div class="small">Luha-luto ng nanay, creamy at malinamnam</div>
-          <div class="price">₱160</div>
-        </div>
-      </div>
-    </aside>
   </section>
 
   <main>
-    <section id="specialties">
-      <h3>Pinakamamahal na Espesyalidad</h3>
-      <div class="menu-grid" style="margin-top:12px">
-        <div class="menu-card">
-          <h4>Kapeng San Gregoryo</h4>
-          <div class="desc">Blend ng Indang beans — may cocoa at citrus notes. Inirerekomenda namin bilang house espresso o pour-over.</div>
-          <div class="meta"><div class="small">Barista’s pick</div><div class="price">₱120</div></div>
-          <button class="btn" onclick="addToCart('Kapeng San Gregoryo',120)">Add to Order</button>
-        </div>
-        <div class="menu-card">
-          <h4>Ensaymada ala Casa</h4>
-          <div class="desc">Homestyle ensaymada: malambot, buttery, may keso sa ibabaw.</div>
-          <div class="meta"><div class="small">Pasalubong favorite</div><div class="price">₱80</div></div>
-          <button class="btn" onclick="addToCart('Ensaymada ala Casa',80)">Add to Order</button>
-        </div>
-        <div class="menu-card">
-          <h4>Adobong Gata</h4>
-          <div class="desc">Coconut-adobo fusion — malinamnam at sadyang comforting.</div>
-          <div class="meta"><div class="small">Main Course</div><div class="price">₱160</div></div>
-          <button class="btn" onclick="addToCart('Adobong Gata',160)">Add to Order</button>
-        </div>
-        <div class="menu-card">
-          <h4>Halo-Halo Local</h4>
-          <div class="desc">Ipinagmamalaking halo-halo gamit ang local ube at leche flan.</div>
-          <div class="meta"><div class="small">Dessert</div><div class="price">₱140</div></div>
-          <button class="btn" onclick="addToCart('Halo-Halo Local',140)">Add to Order</button>
-        </div>
-        <div class="menu-card">
-          <h4>Tsokolate ng Indang</h4>
-          <div class="desc">Rich hot chocolate gawa sa lokal na cacao beans.</div>
-          <div class="meta"><div class="small">Comfort</div><div class="price">₱95</div></div>
-          <button class="btn" onclick="addToCart('Tsokolate ng Indang',95)">Add to Order</button>
-        </div>
-        <div class="menu-card">
-          <h4>Pandesal Pang-umaga</h4>
-          <div class="desc">Mainit-mainit, perfect with butter or kesong puti.</div>
-          <div class="meta"><div class="small">Breakfast</div><div class="price">₱25</div></div>
-          <button class="btn" onclick="addToCart('Pandesal Pang-umaga',25)">Add to Order</button>
-        </div>
-      </div>
-    </section>
-
     <section id="order" style="margin-top:18px">
       <h3>Order (Mock)</h3>
-      <p class="small">Gamitin ang mga "Add to Order" button sa bawat produkto. Ito ay isang demo — hindi totoong magpapadala ng order sa labas.</p>
+      <p class="small">Gamitin ang mga "Add to Order" button sa bawat produkto...</p>
       <div style="margin-top:10px;display:flex;gap:14px;align-items:center">
         <button class="btn" onclick="toggleCart()">Tingnan Cart</button>
         <button class="btn secondary" onclick="clearCart()">I-clear Cart</button>
-        <button class="btn secondary" onclick="downloadReceipt()">Download Receipt</button>
-      </div>
-    </section>
-
-    <section id="about" style="margin-top:18px">
-      <h3>Tungkol sa Amin</h3>
-      <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
-        <div style="flex:1;min-width:260px" class="card">
-          <h4>Ang Kuwento</h4>
-          <p class="desc">Café San Gregoryo ay itinatag bilang maliit na tambayan ng komunidad malapit sa Simbahan ng San Gregoryo. Naglalayong pagsamahin ang tradisyonal na lasa ng Indang sa modernong porma ng café — dito nag-uusap ang matatanda at nagkakatuwaan ang kabataan.</p>
-        </div>
-        <div style="flex:1;min-width:260px" class="card">
-          <h4>Mission</h4>
-          <p class="desc">Maghatid ng pagkain at inumin na may puso, suporta sa lokal na magsasaka, at magbigay ng lugar na ligtas at mainit para sa komunidad.</p>
-        </div>
-      </div>
-
-      <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap">
-        <div class="card" style="flex:1;min-width:220px">
-          <h4>Lokasyon</h4>
-          <p class="small">Harap ng Simbahan ng San Gregoryo, Barangay Poblacion, Indang, Cavite</p>
-        </div>
-        <div class="card" style="flex:1;min-width:220px">
-          <h4>Oras ng Buksan</h4>
-          <p class="small">Lunes–Linggo: 6:00 AM – 9:00 PM</p>
-        </div>
       </div>
     </section>
   </main>
@@ -201,148 +186,127 @@
     </div>
   </div>
 
+  <!-- Coffee Animation -->
+  <div id="coffeeAnimation">
+    <div class="cup">
+      <div class="coffee">
+        <div class="swirl"></div>
+      </div>
+      <div class="latte-leaf"></div>
+      <div class="steam steam1"></div>
+      <div class="steam steam2"></div>
+      <div class="steam steam3"></div>
+    </div>
+  </div>
+
   <footer>
     <div>© Café San Gregoryo • Indang</div>
     <div style="opacity:0.8">Made with local love ❤️</div>
   </footer>
 
-  <!-- Dependencies -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7QVhaR95hO_dUYcP7dJ__2DW0blpMKFI",
+    authDomain: "la-mesa-cafe-system.firebaseapp.com",
+    databaseURL: "https://la-mesa-cafe-system-default-rtdb.firebaseio.com",
+    projectId: "la-mesa-cafe-system",
+    storageBucket: "la-mesa-cafe-system.appspot.com",
+    messagingSenderId: "234244615396",
+    appId: "1:234244615396:web:87725489a3f70fbbabd0f1",
+    measurementId: "G-9CL7KJTYVB"
+  };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC7QVhaR95hO_dUYcP7dJ__2DW0blpMKFI",
-      authDomain: "la-mesa-cafe-system.firebaseapp.com",
-      databaseURL: "https://la-mesa-cafe-system-default-rtdb.firebaseio.com",
-      projectId: "la-mesa-cafe-system",
-      storageBucket: "la-mesa-cafe-system.appspot.com",
-      messagingSenderId: "234244615396",
-      appId: "1:234244615396:web:87725489a3f70fbbabd0f1",
-      measurementId: "G-9CL7KJTYVB"
-    };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  let cart = [];
+  function renderCart(){
+    const el = document.getElementById('cartItems'); 
+    el.innerHTML = '';
+    let total = 0;
+    cart.forEach((it, idx) => {
+      total += it.price * it.qty;
+      const node = document.createElement('div'); 
+      node.className = 'cart-item';
+      node.innerHTML = `
+        <div style="flex:1">
+          <div style="font-weight:700">${it.name}</div>
+          <div class="small">₱${it.price} × ${it.qty}</div>
+        </div>
+        <div class="qty">
+          <button onclick="changeQty(${idx}, -1)">-</button>
+          <div style="min-width:20px;text-align:center">${it.qty}</div>
+          <button onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+      `;
+      el.appendChild(node);
+    });
+    document.getElementById('cartTotal').innerText = total;
+  }
 
-    let cart = [];
-
-    function renderCart(){
-      const el = document.getElementById('cartItems'); 
-      el.innerHTML = '';
-      let total = 0;
-      cart.forEach((it, idx) => {
-        total += it.price * it.qty;
-        const node = document.createElement('div'); 
-        node.className = 'cart-item';
-        node.innerHTML = `
-          <div style="flex:1">
-            <div style="font-weight:700">${it.name}</div>
-            <div class="small">₱${it.price} × ${it.qty}</div>
-          </div>
-          <div class="qty">
-            <button onclick="changeQty(${idx}, -1)">-</button>
-            <div style="min-width:20px;text-align:center">${it.qty}</div>
-            <button onclick="changeQty(${idx}, 1)">+</button>
-          </div>
-        `;
-        el.appendChild(node);
-      });
-      document.getElementById('cartTotal').innerText = total;
-    }
-
-    window.addToCart = function(name, price){
-      const found = cart.find(i => i.name === name);
-      if(found) found.qty++;
-      else cart.push({name, price, qty:1});
-      renderCart();
-      alert(`${name} added to your cart.`);
-    }
-
-    window.changeQty = function(i, delta){
-      cart[i].qty += delta; 
-      if(cart[i].qty <= 0) cart.splice(i, 1);
-      renderCart();
-    }
-
-    window.clearCart = function(){ 
-      if(confirm('Clear cart?')){
-        cart = []; 
-        renderCart();
-      }
-    }
-
-    window.toggleCart = function(){ 
-      const d = document.getElementById('cartDrawer'); 
-      d.classList.toggle('open'); 
-      d.setAttribute('aria-hidden', d.classList.contains('open') ? 'false':'true'); 
-      renderCart(); 
-    }
-
-    window.checkout = function(){
-      if(cart.length === 0){ alert('Cart is empty'); return; }
-      const name = prompt('Enter your name for order');
-      if(!name) return; 
-      const note = prompt('Any note for the order? (optional)') || '';
-
-      const ordersRef = ref(db, 'orders');
-      const newOrderRef = push(ordersRef);
-      set(newOrderRef, {
-        customer: name,
-        note: note,
-        items: cart,
-        total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
-        timestamp: Date.now()
-      }).then(() => {
-        alert(`Order placed online! Total: ₱${cart.reduce((sum, i) => sum + i.price * i.qty, 0)}`);
-        cart = []; 
-        renderCart();
-        toggleCart();
-      }).catch(err => {
-        alert('Error placing order: ' + err);
-      });
-    }
-
-    window.downloadReceipt = function(){
-      if(cart.length === 0){ alert('Cart is empty'); return; }
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF('p', 'pt', [300, 600]);
-      let y = 20;
-
-      doc.setFontSize(14); doc.setFont("helvetica","bold"); doc.text("La Mesa Café", 10, y);
-      y += 16; doc.setFontSize(10); doc.setFont("helvetica","normal");
-      doc.text("Email: lamesacafemain@gmail.com", 10, y); y += 12;
-      doc.text("Phone: +639947900158", 10, y); y += 20;
-      doc.setDrawColor(0); doc.setLineWidth(0.5); doc.line(10, y, 290, y); y += 12;
-
-      cart.forEach(it=>{
-        doc.setFontSize(10); doc.text(`${it.name}`, 10, y);
-        doc.text(`x${it.qty}  ₱${(it.price*it.qty).toFixed(2)}`, 220, y, {align:"right"});
-        y += 12;
-        doc.setLineWidth(0.2); doc.setDrawColor(0,0,0,0.1); doc.line(10,y,290,y); y+=4;
-      });
-
-      y += 10;
-      const total = cart.reduce((sum, i)=>sum + i.price*i.qty,0);
-      doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.text(`Total: ₱${total.toFixed(2)}`, 10, y); y += 20;
-      doc.setFont("helvetica","italic"); doc.setFontSize(10); doc.text("Salamat sa pagbisita!", 10, y); y += 20;
-
-      const qrDiv = document.createElement('div');
-      new QRCode(qrDiv, { text: JSON.stringify(cart), width:80, height:80, correctLevel:QRCode.CorrectLevel.H });
-      const qrCanvas = qrDiv.querySelector('canvas');
-      const qrImg = qrCanvas.toDataURL('image/png');
-      doc.addImage(qrImg, 'PNG', 110, y, 80, 80);
-      y += 90;
-      const finalHeight = Math.max(y + 20, 600);
-      doc.setPage(1); doc.internal.pageSize.height = finalHeight;
-
-      doc.save('LaMesaReceipt.pdf');
-    }
-
+  window.addToCart = function(name, price){
+    const found = cart.find(i => i.name === name);
+    if(found) found.qty++;
+    else cart.push({name, price, qty:1});
     renderCart();
-  </script>
+    alert(`${name} added to your cart.`);
+  }
+
+  window.changeQty = function(i, delta){
+    cart[i].qty += delta; 
+    if(cart[i].qty <= 0) cart.splice(i, 1);
+    renderCart();
+  }
+
+  window.clearCart = function(){ 
+    if(confirm('Clear cart?')){
+      cart = []; 
+      renderCart();
+    }
+  }
+
+  window.toggleCart = function(){ 
+    const d = document.getElementById('cartDrawer'); 
+    d.classList.toggle('open'); 
+    d.setAttribute('aria-hidden', d.classList.contains('open') ? 'false':'true'); 
+    renderCart(); 
+  }
+
+  window.checkout = function(){
+    if(cart.length === 0){ alert('Cart is empty'); return; }
+    const name = prompt('Enter your name for order');
+    if(!name) return; 
+    const note = prompt('Any note for the order? (optional)') || '';
+
+    // Show coffee animation (continuous spin)
+    const anim = document.getElementById('coffeeAnimation');
+    anim.style.display = 'block';
+
+    setTimeout(()=>{ anim.style.display = 'none'; }, 2000);
+
+    // Push order to Firebase
+    const ordersRef = ref(db, 'orders');
+    const newOrderRef = push(ordersRef);
+    set(newOrderRef, {
+      customer: name,
+      note: note,
+      items: cart,
+      total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
+      timestamp: Date.now()
+    }).then(() => {
+      alert(`Order placed online! Total: ₱${cart.reduce((sum, i) => sum + i.price * i.qty, 0)}`);
+      cart = []; 
+      renderCart();
+      toggleCart();
+    }).catch(err => {
+      alert('Error placing order: ' + err);
+    });
+  }
+
+  renderCart();
+</script>
 </body>
 </html>
