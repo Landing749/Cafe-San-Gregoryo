@@ -93,7 +93,6 @@
           <div class="price">₱120</div>
         </div>
       </div>
-
       <div class="special-item">
         <div class="thumb">🥐</div>
         <div>
@@ -102,7 +101,6 @@
           <div class="price">₱80</div>
         </div>
       </div>
-
       <div class="special-item">
         <div class="thumb">🍲</div>
         <div>
@@ -111,7 +109,6 @@
           <div class="price">₱160</div>
         </div>
       </div>
-
     </aside>
   </section>
 
@@ -119,49 +116,42 @@
     <section id="specialties">
       <h3>Pinakamamahal na Espesyalidad</h3>
       <div class="menu-grid" style="margin-top:12px">
-        <!-- cards -->
         <div class="menu-card">
           <h4>Kapeng San Gregoryo</h4>
           <div class="desc">Blend ng Indang beans — may cocoa at citrus notes. Inirerekomenda namin bilang house espresso o pour-over.</div>
           <div class="meta"><div class="small">Barista’s pick</div><div class="price">₱120</div></div>
           <button class="btn" onclick="addToCart('Kapeng San Gregoryo',120)">Add to Order</button>
         </div>
-
         <div class="menu-card">
           <h4>Ensaymada ala Casa</h4>
           <div class="desc">Homestyle ensaymada: malambot, buttery, may keso sa ibabaw.</div>
           <div class="meta"><div class="small">Pasalubong favorite</div><div class="price">₱80</div></div>
           <button class="btn" onclick="addToCart('Ensaymada ala Casa',80)">Add to Order</button>
         </div>
-
         <div class="menu-card">
           <h4>Adobong Gata</h4>
           <div class="desc">Coconut-adobo fusion — malinamnam at sadyang comforting.</div>
           <div class="meta"><div class="small">Main Course</div><div class="price">₱160</div></div>
           <button class="btn" onclick="addToCart('Adobong Gata',160)">Add to Order</button>
         </div>
-
         <div class="menu-card">
           <h4>Halo-Halo Local</h4>
           <div class="desc">Ipinagmamalaking halo-halo gamit ang local ube at leche flan.</div>
           <div class="meta"><div class="small">Dessert</div><div class="price">₱140</div></div>
           <button class="btn" onclick="addToCart('Halo-Halo Local',140)">Add to Order</button>
         </div>
-
         <div class="menu-card">
           <h4>Tsokolate ng Indang</h4>
           <div class="desc">Rich hot chocolate gawa sa lokal na cacao beans.</div>
           <div class="meta"><div class="small">Comfort</div><div class="price">₱95</div></div>
           <button class="btn" onclick="addToCart('Tsokolate ng Indang',95)">Add to Order</button>
         </div>
-
         <div class="menu-card">
           <h4>Pandesal Pang-umaga</h4>
           <div class="desc">Mainit-mainit, perfect with butter or kesong puti.</div>
           <div class="meta"><div class="small">Breakfast</div><div class="price">₱25</div></div>
           <button class="btn" onclick="addToCart('Pandesal Pang-umaga',25)">Add to Order</button>
         </div>
-
       </div>
     </section>
 
@@ -171,6 +161,7 @@
       <div style="margin-top:10px;display:flex;gap:14px;align-items:center">
         <button class="btn" onclick="toggleCart()">Tingnan Cart</button>
         <button class="btn secondary" onclick="clearCart()">I-clear Cart</button>
+        <button class="btn secondary" onclick="downloadReceipt()">Download Receipt</button>
       </div>
     </section>
 
@@ -197,9 +188,7 @@
           <p class="small">Lunes–Linggo: 6:00 AM – 9:00 PM</p>
         </div>
       </div>
-
     </section>
-
   </main>
 
   <button class="cart-btn" onclick="toggleCart()">Cart 🧾</button>
@@ -208,10 +197,7 @@
     <div id="cartItems"></div>
     <div class="checkout">
       <div style="font-weight:800">Total: ₱<span id="cartTotal">0</span></div>
-      <div style="display:flex;gap:6px">
-        <button class="btn" onclick="checkout()">Checkout</button>
-        <button class="btn secondary" onclick="downloadReceipt()">Receipt PDF</button>
-      </div>
+      <button class="btn" onclick="checkout()">Checkout</button>
     </div>
   </div>
 
@@ -220,128 +206,143 @@
     <div style="opacity:0.8">Made with local love ❤️</div>
   </footer>
 
-  <!-- jsPDF and QR code libraries -->
+  <!-- Dependencies -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <script type="module">
-  // Firebase imports
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyC7QVhaR95hO_dUYcP7dJ__2DW0blpMKFI",
-    authDomain: "la-mesa-cafe-system.firebaseapp.com",
-    databaseURL: "https://la-mesa-cafe-system-default-rtdb.firebaseio.com",
-    projectId: "la-mesa-cafe-system",
-    storageBucket: "la-mesa-cafe-system.appspot.com",
-    messagingSenderId: "234244615396",
-    appId: "1:234244615396:web:87725489a3f70fbbabd0f1",
-    measurementId: "G-9CL7KJTYVB"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyC7QVhaR95hO_dUYcP7dJ__2DW0blpMKFI",
+      authDomain: "la-mesa-cafe-system.firebaseapp.com",
+      databaseURL: "https://la-mesa-cafe-system-default-rtdb.firebaseio.com",
+      projectId: "la-mesa-cafe-system",
+      storageBucket: "la-mesa-cafe-system.appspot.com",
+      messagingSenderId: "234244615396",
+      appId: "1:234244615396:web:87725489a3f70fbbabd0f1",
+      measurementId: "G-9CL7KJTYVB"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  let cart = [];
+    let cart = [];
 
-  function renderCart(){
-    const el = document.getElementById('cartItems'); 
-    el.innerHTML = '';
-    let total = 0;
-    cart.forEach((it, idx) => {
-      total += it.price * it.qty;
-      const node = document.createElement('div'); 
-      node.className = 'cart-item';
-      node.innerHTML = `
-        <div style="flex:1">
-          <div style="font-weight:700">${it.name}</div>
-          <div class="small">₱${it.price} × ${it.qty}</div>
-        </div>
-        <div class="qty">
-          <button onclick="changeQty(${idx}, -1)">-</button>
-          <div style="min-width:20px;text-align:center">${it.qty}</div>
-          <button onclick="changeQty(${idx}, 1)">+</button>
-        </div>
-      `;
-      el.appendChild(node);
-    });
-    document.getElementById('cartTotal').innerText = total;
-  }
+    function renderCart(){
+      const el = document.getElementById('cartItems'); 
+      el.innerHTML = '';
+      let total = 0;
+      cart.forEach((it, idx) => {
+        total += it.price * it.qty;
+        const node = document.createElement('div'); 
+        node.className = 'cart-item';
+        node.innerHTML = `
+          <div style="flex:1">
+            <div style="font-weight:700">${it.name}</div>
+            <div class="small">₱${it.price} × ${it.qty}</div>
+          </div>
+          <div class="qty">
+            <button onclick="changeQty(${idx}, -1)">-</button>
+            <div style="min-width:20px;text-align:center">${it.qty}</div>
+            <button onclick="changeQty(${idx}, 1)">+</button>
+          </div>
+        `;
+        el.appendChild(node);
+      });
+      document.getElementById('cartTotal').innerText = total;
+    }
 
-  window.addToCart = function(name, price){
-    const found = cart.find(i => i.name === name);
-    if(found) found.qty++;
-    else cart.push({name, price, qty:1});
-    renderCart();
-    alert(`${name} added to your cart.`);
-  }
+    window.addToCart = function(name, price){
+      const found = cart.find(i => i.name === name);
+      if(found) found.qty++;
+      else cart.push({name, price, qty:1});
+      renderCart();
+      alert(`${name} added to your cart.`);
+    }
 
-  window.changeQty = function(i, delta){
-    cart[i].qty += delta; 
-    if(cart[i].qty <= 0) cart.splice(i, 1);
-    renderCart();
-  }
-
-  window.clearCart = function(){ 
-    if(confirm('Clear cart?')){
-      cart = []; 
+    window.changeQty = function(i, delta){
+      cart[i].qty += delta; 
+      if(cart[i].qty <= 0) cart.splice(i, 1);
       renderCart();
     }
-  }
 
-  window.toggleCart = function(){ 
-    const d = document.getElementById('cartDrawer'); 
-    d.classList.toggle('open'); 
-    d.setAttribute('aria-hidden', d.classList.contains('open') ? 'false':'true'); 
-    renderCart(); 
-  }
+    window.clearCart = function(){ 
+      if(confirm('Clear cart?')){
+        cart = []; 
+        renderCart();
+      }
+    }
 
-  window.checkout = function(){
-    if(cart.length === 0){ alert('Cart is empty'); return; }
-    const name = prompt('Enter your name for order');
-    if(!name) return; 
-    const note = prompt('Any note for the order? (optional)') || '';
+    window.toggleCart = function(){ 
+      const d = document.getElementById('cartDrawer'); 
+      d.classList.toggle('open'); 
+      d.setAttribute('aria-hidden', d.classList.contains('open') ? 'false':'true'); 
+      renderCart(); 
+    }
 
-    const ordersRef = ref(db, 'orders');
-    const newOrderRef = push(ordersRef);
-    const orderId = newOrderRef.key; // unique id
-    set(newOrderRef, {
-      customer: name,
-      note: note,
-      items: cart,
-      total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
-      timestamp: Date.now()
-    }).then(() => {
-      alert(`Order placed online! Total: ₱${cart.reduce((sum, i) => sum + i.price * i.qty, 0)}`);
-      cart = []; 
-      renderCart();
-      toggleCart();
-    }).catch(err => {
-      alert('Error placing order: ' + err);
-    });
-  }
+    window.checkout = function(){
+      if(cart.length === 0){ alert('Cart is empty'); return; }
+      const name = prompt('Enter your name for order');
+      if(!name) return; 
+      const note = prompt('Any note for the order? (optional)') || '';
 
-  // Receipt PDF generation
-  window.downloadReceipt = function(){
-    if(cart.length === 0){ alert('Cart is empty'); return; }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const date = new Date().toLocaleString();
+      const ordersRef = ref(db, 'orders');
+      const newOrderRef = push(ordersRef);
+      set(newOrderRef, {
+        customer: name,
+        note: note,
+        items: cart,
+        total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
+        timestamp: Date.now()
+      }).then(() => {
+        alert(`Order placed online! Total: ₱${cart.reduce((sum, i) => sum + i.price * i.qty, 0)}`);
+        cart = []; 
+        renderCart();
+        toggleCart();
+      }).catch(err => {
+        alert('Error placing order: ' + err);
+      });
+    }
 
-    doc.setFontSize(16); doc.text("La Mesa Café", 105, 15, {align:'center'});
-    doc.setFontSize(10); doc.text(`Order Date: ${date}`, 105, 22, {align:'center'});
-    let y = 35;
-    cart.forEach(item=>{
-      doc.text(`${item.qty} × ${item.name}`, 14, y);
-      doc.text(`₱${item.price*item.qty}`, 160, y, {align:'right'});
-      y += 8;
-    });
-    doc.setFontSize(12); doc.text(`Total: ₱${cart.reduce((sum,i)=>sum+i.price*i.qty,0)}`, 105, y+8, {align:'center'});
-    doc.save('receipt.pdf');
-  }
+    window.downloadReceipt = function(){
+      if(cart.length === 0){ alert('Cart is empty'); return; }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'pt', [300, 600]);
+      let y = 20;
 
-  renderCart();
+      doc.setFontSize(14); doc.setFont("helvetica","bold"); doc.text("La Mesa Café", 10, y);
+      y += 16; doc.setFontSize(10); doc.setFont("helvetica","normal");
+      doc.text("Email: lamesacafemain@gmail.com", 10, y); y += 12;
+      doc.text("Phone: +639947900158", 10, y); y += 20;
+      doc.setDrawColor(0); doc.setLineWidth(0.5); doc.line(10, y, 290, y); y += 12;
+
+      cart.forEach(it=>{
+        doc.setFontSize(10); doc.text(`${it.name}`, 10, y);
+        doc.text(`x${it.qty}  ₱${(it.price*it.qty).toFixed(2)}`, 220, y, {align:"right"});
+        y += 12;
+        doc.setLineWidth(0.2); doc.setDrawColor(0,0,0,0.1); doc.line(10,y,290,y); y+=4;
+      });
+
+      y += 10;
+      const total = cart.reduce((sum, i)=>sum + i.price*i.qty,0);
+      doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.text(`Total: ₱${total.toFixed(2)}`, 10, y); y += 20;
+      doc.setFont("helvetica","italic"); doc.setFontSize(10); doc.text("Salamat sa pagbisita!", 10, y); y += 20;
+
+      const qrDiv = document.createElement('div');
+      new QRCode(qrDiv, { text: JSON.stringify(cart), width:80, height:80, correctLevel:QRCode.CorrectLevel.H });
+      const qrCanvas = qrDiv.querySelector('canvas');
+      const qrImg = qrCanvas.toDataURL('image/png');
+      doc.addImage(qrImg, 'PNG', 110, y, 80, 80);
+      y += 90;
+      const finalHeight = Math.max(y + 20, 600);
+      doc.setPage(1); doc.internal.pageSize.height = finalHeight;
+
+      doc.save('LaMesaReceipt.pdf');
+    }
+
+    renderCart();
   </script>
 </body>
 </html>
